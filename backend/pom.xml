@@ -22,6 +22,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
+        <ibm.bluemix.version>1.0.2</ibm.bluemix.version>
     </properties>
 
     <dependencies>
@@ -29,7 +30,13 @@
         <dependency>
             <groupId>com.ibm.cos</groupId>
             <artifactId>ibm-cos-java-sdk-core</artifactId>
-            <version>1.0.2</version>
+            <version>${ibm.bluemix.version}</version>
+        </dependency>
+
+        <dependency>
+            <artifactId>ibm-cos-java-sdk-s3</artifactId>
+            <groupId>com.ibm.cos</groupId>
+            <version>${ibm.bluemix.version}</version>
         </dependency>
 
         <dependency>
