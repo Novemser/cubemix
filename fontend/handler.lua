@@ -3,20 +3,21 @@
 function ParseResponseMessage(message)
   local m = json.parse(message)
   LOG(m)
-  -- deal with table events
-  if m.cmd == "listBucket" 
+  if m.method == "listBucket" 
   then
 
-  -- deal with monitor events
-  elseif m.cmd == "listObject" 
+  elseif m.method == "listObject" 
   then
 
-  elseif m.cmd == "createBuciet" 
+  elseif m.method == "createBuciet" 
   then
 
-  elseif m.cmd == "createText"
+  elseif m.method == "createText"
   then
-  
+
+  elseif m.method == "destroyObject"
+  then
+
   end
 end
 
