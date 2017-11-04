@@ -4,8 +4,10 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
 import com.amazonaws.util.StringInputStream;
 import org.apache.commons.logging.impl.SLF4JLogFactory;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.BeanClassLoaderAware;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,9 +47,15 @@ public class ObjStorageService {
     }
 
     public List<S3ObjectSummary> listObjectSummary(String bucketName) {
-        return amazonS3
-                .listObjects(new ListObjectsRequest().withBucketName(bucketName))
-                .getObjectSummaries();
+        List<S3ObjectSummary> s3ObjectSummaryList = new ArrayList<>();
+        try {
+            s3ObjectSummaryList = amazonS3
+                    .listObjects(new ListObjectsRequest().withBucketName(bucketName))
+                    .getObjectSummaries();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return s3ObjectSummaryList;
     }
 
     public Boolean createBucket(String name) {
@@ -140,5 +148,40 @@ public class ObjStorageService {
         return result;
     }
 
+    private Boolean deleteAllObjectInBucket(String bucketName) {
+        List<S3ObjectSummary> s3ObjectSummaryList = listObjectSummary(bucketName);
+
+        Boolean result = false;
+        try {
+            for (S3ObjectSummary s : s3ObjectSummaryList) {
+                amazonS3.deleteObject(bucketName, s.getKey());
+            }
+            result = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+
+
+//        amazonS3.deleteObject(bucketName,"");
+    }
+
+    //deleteBucket(String bucketName)
+    public Boolean deleteBucket(String bucketName) {
+        Boolean result = false;
+
+        Boolean conditionState = deleteAllObjectInBucket(bucketName);
+        if (conditionState) {
+            try {
+                amazonS3.deleteBucket(bucketName);
+                result = true;
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+
+    }
 
 }

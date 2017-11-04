@@ -75,6 +75,14 @@ public class MainController {
         return objStorageService.deleteobject(name, bucketName);
     }
 
+
+    //Delete object
+    @RequestMapping(value = "/destroyBucket/{bucketName}", method = RequestMethod.DELETE)
+    public Boolean destroyBucket(@PathVariable String bucketName) {
+        return objStorageService.deleteBucket(bucketName);
+    }
+
+
     //    servlet
     @RequestMapping(value = "/servlet", method = RequestMethod.POST, produces = {"application/json"})
     public Object DeleteObject(@RequestBody MessageModel m) {

@@ -8,7 +8,6 @@ function NewObject()
 		name = "",
 		id = "",
 		text = "",
-		imageTag = "",
 		init = Object.init,
 		setInfos = Object.setInfos,
 		destroy = Object.destroy,
@@ -18,10 +17,7 @@ function NewObject()
 end
 
 Object = {displayed = false, bucketId = "", x = 0, z = 0, y = 0, name = "", id="",text = ""}
-function Object:init(x,y,z)
-	self.x = x
-	self.z = z
-	self.y = y
+function Object:init()
 	self.displayed = false
 end
 
@@ -37,17 +33,24 @@ function Object:destroy()
 	local y = self.y
 	local z = self.z
 	digBlock(UpdateQueue,x,y,z)
+	Objects[self.id] = nil
 
 end
 
 function Object:display()
-	local metaPrimaryColor = E_META_WOOL_LIGHTBLUE
-	local metaSecondaryColor = E_META_WOOL_BLUE
+	local bucketX = Buckets[self.bucketId].x
+	local bucketZ = Buckets[self.bucketId].z
+	local objectX={1,2,4,5,1,2,4,5,1,2,4,5}
+	local objectY={2,2,2,2,4,4,4,4,6,6,6,6}
 
-	setBlock(UpdateQueue, self.x, self.y, self.z,E_BLOCK_WOOL,metaPrimaryColor)
-	setBlock(UpdateQueue,self.x,self.y,self.z,E_BLOCK_WALLSIGN,E_META_CHEST_FACING_XP)
-	updateSign(UpdateQueue,self.x,self.y,self.z,"1","2","3","4"£¬2)
+	if Objects[self.id] == nil
+	then
+		self.x = objectX[id]+bucketX
+		self.y = Y_GROUND
+		self.z = objectZ[id]+bucketZ
+		setBlock(UpdateQueue, self.x, self.y, self.z,E_BLOCK_BOOKCASE, 0)
+		setBlock(UpdateQueue,self.x,self.y,self.z,E_BLOCK_WALLSIGN,E_META_CHEST_FACING_XP)
+		updateSign(UpdateQueue,self.x,self.y,self.z,self.id,self.name,self.text,"4"ï¼Œ2)
+		break
+	end
 end
-
-
-
