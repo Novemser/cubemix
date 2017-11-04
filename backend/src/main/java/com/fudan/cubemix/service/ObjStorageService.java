@@ -2,6 +2,7 @@ package com.fudan.cubemix.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
+import com.amazonaws.util.StringInputStream;
 import org.apache.commons.logging.impl.SLF4JLogFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,10 +13,13 @@ import org.springframework.stereotype.Service;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @package com.fudan.cubemix.service
@@ -69,6 +73,24 @@ public class ObjStorageService {
             e.printStackTrace();
             return false;
         }
+    }
+
+
+    public Boolean uploadTextTest(String bucket, String text) {
+        Boolean result = false;
+        try {
+            InputStream is = new StringInputStream(text);
+            ObjectMetadata metadata = new ObjectMetadata();
+            metadata.setContentLength(text.length());
+
+            PutObjectRequest request =
+                    new PutObjectRequest(bucket, UUID.randomUUID().toString(), is, metadata);
+            amazonS3.putObject(request);
+            result = true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     public String downloadObject(String path, String bucket) {

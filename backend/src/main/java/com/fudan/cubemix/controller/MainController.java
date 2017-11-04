@@ -1,6 +1,8 @@
 package com.fudan.cubemix.controller;
 
 import com.amazonaws.services.s3.model.S3ObjectSummary;
+import com.fasterxml.jackson.databind.util.JSONPObject;
+import com.fudan.cubemix.model.MessageModel;
 import com.fudan.cubemix.service.ObjStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -23,11 +25,21 @@ public class MainController {
         this.objStorageService = objStorageService;
     }
 
-    @GetMapping("/listNamespace")
+    @GetMapping("/listBucket")
     public Object listNamespace() {
         return objStorageService.listBuckets();
     }
 
+    //createText {bucketName} {text}
+    @RequestMapping(value = "/createText/{bucketName}/{text}", method = RequestMethod.POST)
+    public Object createText(@PathVariable String bucketName, @PathVariable String text) {
+
+        return objStorageService.uploadTextTest(bucketName, text);
+
+    }
+
+
+    //List objects
     @GetMapping("/listObject/{namespace}")
     public Object listObject(@PathVariable String namespace) {
         return objStorageService.listObjectSummary(namespace);
@@ -55,16 +67,17 @@ public class MainController {
         return objStorageService.copyObject(from, to, name, newName);
     }
 
-    //List objects
-    @RequestMapping(value = "/{key}/{bucket}", method = RequestMethod.GET)
-    public List<S3ObjectSummary> DeleteObject(@PathVariable String bucket) {
-        return objStorageService.showAllObject(bucket);
-    }
 
     //Delete object
-    @RequestMapping(value = "/{key}/{bucket}", method = RequestMethod.DELETE)
-    public Boolean ShowAllObject(@PathVariable String key, @PathVariable String bucket) {
-        return objStorageService.deleteobject(key, bucket);
+    @RequestMapping(value = "/destroyObject/{bucketName}/{name}", method = RequestMethod.DELETE)
+    public Boolean ShowAllObject(@PathVariable String bucketName, @PathVariable String name) {
+        return objStorageService.deleteobject(name, bucketName);
+    }
+
+    //    servlet
+    @RequestMapping(value = "/servlet", method = RequestMethod.POST, produces = {"application/json"})
+    public Object DeleteObject(@RequestBody MessageModel m) {
+        return m;
     }
 
 }
