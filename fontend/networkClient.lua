@@ -1,6 +1,6 @@
 json = require "json"
 
-CUBEMIX_SERVER_IP = "10.1.1.41"
+CUBEMIX_SERVER_IP = "localhost"
 CUBEMIX_SERVER_PORT = 4700
 CONNECTION = nil
 TCP_DATA = ""
@@ -31,17 +31,23 @@ CLIENT_HANDLER = {
 
   OnReceivedData = function (TCPConn, Data)
     LOG("Incoming data:\r\n" .. Data)
-    -- Data has been received on the link
-    -- Will get called whenever there's new data on the link
-    -- a_Data contains the raw received data, as a string
-    ParseResponseMessage(message)
+
+    TCP_DATA = TCP_DATA .. Data
+    local shiftLen = 0
+
+    for message in string.gmatch(TCP_DATA, '([^\n]+\n)') do
+      shiftLen = shiftLen + string.len(message)
+      -- remove \n at the end
+      message = string.sub(message,1,string.len(message)-1)
+      ParseTCPMessage(message)
+      LOG("TCPMSG:" + TCP_DATA)
+    end
+
+    TCP_DATA = string.sub(TCP_DATA,shiftLen+1)
   end,
 
   OnRemoteClosed = function (TCPConn)
     -- The remote peer has closed the link
-    -- The link is already closed, any data sent to it now will be lost
-    -- No other callback will be called for this link from now on
-    -- All returned values are ignored
     LOG("tcp client OnRemoteClosed")
 
     -- retry to establish connection

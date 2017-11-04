@@ -1,5 +1,6 @@
 package com.fudan.cubemix.controller;
 
+import com.amazonaws.services.s3.model.Bucket;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.fudan.cubemix.model.MessageModel;
@@ -26,7 +27,7 @@ public class MainController {
     }
 
     @GetMapping("/listBucket")
-    public Object listNamespace() {
+    public List<Bucket> listNamespace() {
         return objStorageService.listBuckets();
     }
 
@@ -41,7 +42,7 @@ public class MainController {
 
     //List objects
     @GetMapping("/listObject/{namespace}")
-    public Object listObject(@PathVariable String namespace) {
+    public List<S3ObjectSummary> listObject(@PathVariable String namespace) {
         return objStorageService.listObjectSummary(namespace);
     }
 
