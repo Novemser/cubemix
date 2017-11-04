@@ -30,9 +30,11 @@ function Object:setInfos(bucketName, storageClass, size, lastModified, key)
 end
 
 function Object:destroy()
+    World = cRoot:Get():GetDefaultWorld()
     local x = self.x
     local z = self.z
-    digBlock(UpdateQueue, x, Y_GROUND, z)
+    World:DigBlock(x, Y_GROUND + 1, z)
+    World:DigBlock(x, Y_GROUND + 2, z)
 end
 
 function Object:display()

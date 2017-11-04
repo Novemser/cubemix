@@ -55,6 +55,9 @@ function ParseTCPMessage(message)
     end
 end
 
+function destroyAnObject(bucketName, key)
+    Buckets[bucketName][key]:destroy()
+end
 
 -- destroyBucket looks for the first Bucket having the given id,
 -- removes it from the Minecraft world and from the 'Buckets' array
