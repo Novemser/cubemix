@@ -2,12 +2,14 @@ function NewObject()
 	c = {
 		displayed = false,
 		bucketId = "",
+		storageClass="",
 		x = 0,
 		z = 0,
-		y = 0,
+		size = "",
+		lastModified = "",
 		name = "",
 		id = "",
-		text = "",
+		key = "",
 		init = Object.init,
 		setInfos = Object.setInfos,
 		destroy = Object.destroy,
@@ -16,23 +18,26 @@ function NewObject()
 	return c
 end
 
-Object = {displayed = false, bucketId = "", x = 0, z = 0, y = 0, name = "", id="",text = ""}
+Object = {displayed = false, bucketId = "",storageClass="", x = 0, z = 0,size = "",lastModified="", name = "", id="",key="",text = ""}
 function Object:init()
 	self.displayed = false
 end
 
-function Object:setInfos(id,name,text,bucketId)
+function Object:setInfos(id,name,text,bucketId,storageClass,size,lastModified,key)
 	self.id = id
 	self.name = name
 	self.text = text
 	self.bucketId = bucketId
+	self.storageClass = storageClass
+	self.size = size
+	self.lastModified = lastModified
+	self.key = key
 end
 
 function Object:destroy()
 	local x = self.x
-	local y = self.y
 	local z = self.z
-	digBlock(UpdateQueue,x,y,z)
+	digBlock(UpdateQueue,x,Y_GROUND,z)
 	Objects[self.id] = nil
 
 end
@@ -46,11 +51,10 @@ function Object:display()
 	if Objects[self.id] == nil
 	then
 		self.x = objectX[id]+bucketX
-		self.y = Y_GROUND
 		self.z = objectZ[id]+bucketZ
-		setBlock(UpdateQueue, self.x, self.y, self.z,E_BLOCK_BOOKCASE, 0)
-		setBlock(UpdateQueue,self.x,self.y,self.z,E_BLOCK_WALLSIGN,E_META_CHEST_FACING_XP)
-		updateSign(UpdateQueue,self.x,self.y,self.z,self.id,self.name,self.text,"4"，2)
+		setBlock(UpdateQueue, self.x, Y_GROUND, self.z,E_BLOCK_BOOKCASE, 0)
+		setBlock(UpdateQueue,self.x,Y_GROUND,self.z,E_BLOCK_WALLSIGN,E_META_CHEST_FACING_XP)
+		updateSign(UpdateQueue,self.x,Y_GROUND,self.z,self.id,self.name,self.key,self.lastModified，2)
 		break
 	end
 end
