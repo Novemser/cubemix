@@ -133,18 +133,17 @@ public class ObjStorageService {
 
     //Delete object
 
-    public Boolean deleteobject(String key, String bucket) {
-        Boolean result = false;
+    public Boolean deleteObject(String key, String bucket) {
         try {
             amazonS3.deleteObject( // delete the Object, passing…
                     bucket, // the name of the Bucket that stores the Object,
                     key // and he name of the Object to be deleted
             );
-            result = true;
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
-        return result;
     }
 
     private Boolean deleteAllObjectInBucket(String bucketName) {

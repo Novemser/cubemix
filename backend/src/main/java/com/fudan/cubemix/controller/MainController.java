@@ -2,7 +2,6 @@ package com.fudan.cubemix.controller;
 
 import com.amazonaws.services.s3.model.Bucket;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.fudan.cubemix.model.MessageModel;
 import com.fudan.cubemix.service.ObjStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,7 +71,7 @@ public class MainController {
     //Delete object
     @RequestMapping(value = "/destroyObject/{bucketName}/{name}", method = RequestMethod.DELETE)
     public Boolean deleteObject(@PathVariable String bucketName, @PathVariable String name) {
-        return objStorageService.deleteobject(name, bucketName);
+        return objStorageService.deleteObject(name, bucketName);
     }
 
 

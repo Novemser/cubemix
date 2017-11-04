@@ -155,6 +155,7 @@ public class SocketService {
         result.put("method", method);
         if (method.equals("listBucket")) {
             result.put("totalBucketCount", bucketSize);
+            result.put("args", new ArrayList<>());
         }
 
         if (args != null) {
