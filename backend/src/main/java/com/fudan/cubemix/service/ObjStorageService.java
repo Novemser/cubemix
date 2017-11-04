@@ -47,9 +47,15 @@ public class ObjStorageService {
     }
 
     public List<S3ObjectSummary> listObjectSummary(String bucketName) {
-        return amazonS3
-                .listObjects(new ListObjectsRequest().withBucketName(bucketName))
-                .getObjectSummaries();
+        List<S3ObjectSummary> s3ObjectSummaryList = new ArrayList<>();
+        try {
+            s3ObjectSummaryList = amazonS3
+                    .listObjects(new ListObjectsRequest().withBucketName(bucketName))
+                    .getObjectSummaries();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return s3ObjectSummaryList;
     }
 
     public Boolean createBucket(String name) {
