@@ -24,10 +24,10 @@ end
 function Cubemix(Split, Player)
 	PLAYER = Player
 	
-	if (#Split < 1) {
+	if (#Split < 1) then
 		Player:SendMessage("Usage: /cubemix [command] [args]")
 		return true
-	}
+	end
 
 	ParseCommand(Split)
 	return true

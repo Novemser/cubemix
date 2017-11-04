@@ -1,6 +1,6 @@
 json = require "json"
 
-CUBEMIX_SERVER_IP = 10.1.1.41
+CUBEMIX_SERVER_IP = "10.1.1.41"
 CUBEMIX_SERVER_PORT = 4700
 CONNECTION = nil
 TCP_DATA = ""
@@ -50,15 +50,17 @@ CLIENT_HANDLER = {
   end,
 }
 
--- SendMessage sends a message over global
+-- SendRequest sends a message over global
 -- tcp connection CONNECTION. args and id are optional
 -- id stands for the request id.
-function SendMessage(msg)
+function SendRequest(name, args, data)
   if CONNECTION == nil
   then
     LOG("can't send message, client not connected")
     return
   end
-  LOG(""msg)
-  CONNECTION:Send(msg)
+  local v = {method=name,args=args,data=nil}
+  local req = json.stringify(v) .. "\n"
+  LOG("Sending request:" .. req)
+  CONNECTION:Send(req)
 end

@@ -2,10 +2,11 @@
 -- global tcp connection CONNECTION
 function ParseResponseMessage(message)
   local m = json.parse(message)
+  LOG(m)
   -- deal with table events
   if m.cmd == "listBucket" 
   then
-  
+
   -- deal with monitor events
   elseif m.cmd == "listObject" 
   then
@@ -15,6 +16,7 @@ function ParseResponseMessage(message)
 
   elseif m.cmd == "createText"
   then
-    handleQueryEvent(m.data)
+  
   end
 end
+

@@ -1,23 +1,38 @@
+json = require "json"
 
 function ParseCommand(Split)
-	-- body
 	cmd = Split[2]
-	if m.cmd == "listBucket" 
+	if cmd == "listBucket" 
   	then
-  		handleListBucket()
-    elseif m.cmd == "listObject" 
+  		listBucket()
+    elseif cmd == "listObject" 
   	then
-		handleCreateBuciet()
-  	elseif m.cmd == "createBuciet" 
+		listObject(Split[3])
+  	elseif cmd == "createBucket" 
   	then
-		handleCreateText()
-  	elseif m.cmd == "createText"
+		createBucket(Split[3])
+  	elseif cmd == "createText"
   	then
-    	handleQueryEvent(m.data)
+    	createText(Split[3], Split[4])
   	end
 end
 
 function listBucket()
 	-- body
+	SendRequest("listBucket", nil, nil)
+end
 
+function listObject(bucketName)
+	-- body
+	SendRequest("listObject", {ucketName}, nil)
+end
+
+function createBucket(bucketName)
+	-- body
+	SendRequest("createBucket", {bucketName}, nil)
+end
+
+function createText(bucketName, text)
+	-- body
+	SendRequest("createText", {bucketName, text}, nil)
 end
