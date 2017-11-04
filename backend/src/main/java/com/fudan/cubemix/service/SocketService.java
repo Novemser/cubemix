@@ -32,6 +32,8 @@ public class SocketService {
     @Autowired
     private MainController mainController;
 
+    private int bucketSize;
+
     public void initService() {
         System.out.println("Starting up socket server");
         try {
@@ -73,7 +75,18 @@ public class SocketService {
                 if (method.equals("listBucket")) {
                     JSONArray resArray = new JSONArray();
                     List<Bucket> buckets = mainController.listNamespace();
-                    
+                    bucketSize = buckets.size();
+                    for (Bucket bu : buckets) {
+                        JSONObject object = new JSONObject();
+                        String nameSpace = bu.getName();
+                        List<S3ObjectSummary> summaries = mainController.listObject(nameSpace);
+                        object.put("totalObjCount", summaries.size());
+                        object.put("name", nameSpace);
+                        object.put("creationDate", bu.getCreationDate());
+                        resArray.add(object);
+                    }
+
+                    data = resArray;
                 } else if (method.equals("listObject")) {
                     JSONArray resArray = new JSONArray();
                     List<S3ObjectSummary> summaries = mainController.listObject(args.get(0));
@@ -116,6 +129,10 @@ public class SocketService {
             Object data) {
         JSONObject result = new JSONObject();
         result.put("method", method);
+        if (method.equals("listBucket")) {
+            result.put("totalBucketCount", bucketSize);
+        }
+
         if (args != null) {
             result.put("args", args);
         }

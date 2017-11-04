@@ -8,6 +8,8 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+
 /**
  * @package com.fudan.cubemix.listener
  * @Author Novemser
@@ -30,6 +32,6 @@ public class StartupListener {
 
     @EventListener(ContextRefreshedEvent.class)
     public void startUp() {
-        socketService.initService();
+        new Thread(socketService::initService).start();
     }
 }
