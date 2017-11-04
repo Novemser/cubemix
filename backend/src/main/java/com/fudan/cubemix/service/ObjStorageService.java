@@ -4,6 +4,9 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.Bucket;
 import com.amazonaws.services.s3.model.ListObjectsRequest;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
+import org.apache.commons.logging.impl.SLF4JLogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,18 +22,22 @@ import java.util.List;
 @Service
 public class ObjStorageService {
     private final AmazonS3 amazonS3;
-
+    private final Logger logger = LoggerFactory.getLogger(getClass().getName());
 
     @Autowired
     public ObjStorageService(AmazonS3 amazonS3) {
         this.amazonS3 = amazonS3;
     }
 
-    List<Bucket> listBuckets() {
+    public List<Bucket> listBuckets() {
         return amazonS3.listBuckets();
     }
 
-    List<S3ObjectSummary> listObjSummary(String bucketName) {
-        return amazonS3.listObjects(new ListObjectsRequest().withBucketName(bucketName)).getObjectSummaries();
+    public List<S3ObjectSummary> listObjectSummary(String bucketName) {
+        return amazonS3
+                .listObjects(new ListObjectsRequest().withBucketName(bucketName))
+                .getObjectSummaries();
     }
+
+
 }
