@@ -1,13 +1,13 @@
 function NewObject()
 	c = {
 		displayed = false,
-		bucketId = "",
+		bucketName = "",
+		storageClass="",
 		x = 0,
 		z = 0,
-		y = 0,
-		name = "",
-		id = "",
-		text = "",
+		size = "",
+		lastModified = "",
+		key = "",
 		init = Object.init,
 		setInfos = Object.setInfos,
 		destroy = Object.destroy,
@@ -16,41 +16,34 @@ function NewObject()
 	return c
 end
 
-Object = {displayed = false, bucketId = "", x = 0, z = 0, y = 0, name = "", id="",text = ""}
+Object = {displayed = false, bucketName="",storageClass="", x = 0, z = 0,size = "",lastModified="", key=""}
 function Object:init()
 	self.displayed = false
 end
 
-function Object:setInfos(id,name,text,bucketId)
-	self.id = id
-	self.name = name
-	self.text = text
-	self.bucketId = bucketId
+function Object:setInfos(bucketName,storageClass,size,lastModified,key)
+	self.bucketName = bucketName
+	self.storageClass = storageClass
+	self.size = size
+	self.lastModified = lastModified
+	self.key = key
 end
 
 function Object:destroy()
 	local x = self.x
-	local y = self.y
 	local z = self.z
-	digBlock(UpdateQueue,x,y,z)
-	Objects[self.id] = nil
-
+	digBlock(UpdateQueue,x,Y_GROUND,z)
 end
 
 function Object:display()
-	local bucketX = Buckets[self.bucketId].x
+	local bucketX = Bucketsf.bucketId].x
 	local bucketZ = Buckets[self.bucketId].z
 	local objectX={1,2,4,5,1,2,4,5,1,2,4,5}
 	local objectY={2,2,2,2,4,4,4,4,6,6,6,6}
 
-	if Objects[self.id] == nil
-	then
-		self.x = objectX[id]+bucketX
-		self.y = Y_GROUND
-		self.z = objectZ[id]+bucketZ
-		setBlock(UpdateQueue, self.x, self.y, self.z,E_BLOCK_BOOKCASE, 0)
-		setBlock(UpdateQueue,self.x,self.y,self.z,E_BLOCK_WALLSIGN,E_META_CHEST_FACING_XP)
-		updateSign(UpdateQueue,self.x,self.y,self.z,self.id,self.name,self.text,"4"，2)
-		break
-	end
+	self.x = objectX[id]+bucketX
+	self.z = objectZ[id]+bucketZ
+	setBlock(UpdateQueue, self.x, Y_GROUND, self.z,E_BLOCK_BOOKCASE, 0)
+	setBlock(UpdateQueue,self.x,Y_GROUND,self.z,E_BLOCK_WALLSIGN,E_META_CHEST_FACING_XP)
+	updateSign(UpdateQueue,self.x,Y_GROUND,self.z,self.id,self.name,self.key,self.lastModified，2)
 end
