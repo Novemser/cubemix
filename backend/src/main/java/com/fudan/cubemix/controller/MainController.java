@@ -71,7 +71,7 @@ public class MainController {
 
     //Delete object
     @RequestMapping(value = "/destroyObject/{bucketName}/{name}", method = RequestMethod.DELETE)
-    public Boolean ShowAllObject(@PathVariable String bucketName, @PathVariable String name) {
+    public Boolean deleteObject(@PathVariable String bucketName, @PathVariable String name) {
         return objStorageService.deleteobject(name, bucketName);
     }
 

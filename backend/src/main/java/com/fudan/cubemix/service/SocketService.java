@@ -17,6 +17,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @package com.fudan.cubemix.service
@@ -29,6 +30,12 @@ import java.util.List;
 public class SocketService {
     private ServerSocket server;
     private Socket socket;
+    private PrintWriter os;
+
+    public PrintWriter getOutputStream() {
+        return os;
+    }
+
     @Autowired
     private MainController mainController;
 
@@ -55,7 +62,7 @@ public class SocketService {
             String requestStr;
             BufferedReader is = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             //由Socket对象得到输入流，并构造相应的BufferedReader对象
-            PrintWriter os = new PrintWriter(socket.getOutputStream());
+            os = new PrintWriter(socket.getOutputStream());
 
             //从标准输入读入一字符串
             while (true) {
@@ -82,7 +89,7 @@ public class SocketService {
                         List<S3ObjectSummary> summaries = mainController.listObject(nameSpace);
                         object.put("totalObjCount", summaries.size());
                         object.put("name", nameSpace);
-                        object.put("creationDate", bu.getCreationDate());
+                        object.put("creationDate", bu.getCreationDate().toString());
                         resArray.add(object);
                     }
 
@@ -94,16 +101,31 @@ public class SocketService {
                         JSONObject object = new JSONObject();
                         object.put("key", summary.getKey());
                         object.put("size", summary.getSize());
-                        object.put("lastModified", summary.getLastModified());
+                        object.put("lastModified", summary.getLastModified().toString());
                         object.put("storageClass", summary.getStorageClass());
                         resArray.add(object);
                     }
 
                     data = resArray;
                 } else if (method.equals("createBucket")) {
-                    data = mainController.createBucket(args.get(0));
+                    JSONObject object = new JSONObject();
+                    if (args.get(0).length() < 3) {
+                        args.set(0, UUID.randomUUID().toString());
+                    }
+                    Bucket bucket = mainController.createBucket(args.get(0));
+                    object.put("name", bucket == null? "": bucket.getName());
+                    object.put("totalObjCount", 0);
+                    object.put("creationDate", new Date().toString());
+                    data = object;
                 } else if (method.equals("createText")) {
-                    mainController.createText(args.get(0), args.get(1));
+                    JSONObject object = new JSONObject();
+                    object.put("isSuccess", mainController.createText(args.get(0), args.get(1)));
+                    object.put("text", args.get(1));
+                    data = object;
+                } else if (method.equals("destroyBucket")) {
+                    data = mainController.destroyBucket(args.get(0));
+                } else if (method.equals("destroyObject")) {
+                    data = mainController.deleteObject(args.get(0), args.get(1));
                 }
 
                 os.print(packResponse(method, args, data) + "\n");
