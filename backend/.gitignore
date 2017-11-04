@@ -20,5 +20,7 @@ nbproject/private/
 build/
 nbbuild/
 dist/
+mvnw
+mvnw.cmd
 nbdist/
 .nb-gradle/
