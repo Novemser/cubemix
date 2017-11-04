@@ -32,15 +32,15 @@ public class ReSender {
 
     public static String ResendTo(MessageModel mm) throws IOException {
         MessageModel messageModel = new MessageModel();
-        messageModel.setArgsVal(mm.getArgsVal());
-        messageModel.setMehodName(mm.getMehodName());
-        String query = getParameters(mm.getArgsVal());
+        messageModel.setArgs(mm.getArgs());
+        messageModel.setMethod(mm.getMethod());
+        String query = getParameters(mm.getArgs());
         try {
             Socket socket = new Socket("127.0.0.1", 8080);
-            String path = "/" + mm.getMehodName() + query;
+            String path = "/" + mm.getMethod() + query;
 
             // Send headers
-            String method = methodMap.get(mm.getMehodName());
+            String method = methodMap.get(mm.getMethod());
 //            System.out.println(path);
 //            System.out.println(method);
 

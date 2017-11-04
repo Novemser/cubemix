@@ -1,37 +1,34 @@
 import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 public class MessageModel {
-    private String mehodName;
-    private JSONArray argsVal = new JSONArray();
-    private JSONObject data = new JSONObject();
+    private String method;
+    private JSONArray args = new JSONArray();
+    private String data = "";
 
     public MessageModel() {
     }
 
-    public String getMehodName() {
-        return mehodName;
+    public String getMethod() {
+        return method;
     }
 
-    public void setMehodName(String mehodName) {
-        this.mehodName = mehodName;
+    public void setMethod(String method) {
+        this.method = method;
     }
 
-    public JSONArray getArgsVal() {
-        return argsVal;
+    public JSONArray getArgs() {
+        return args;
     }
 
-    public void setArgsVal(JSONArray argsVal) {
-        this.argsVal = argsVal;
+    public void setArgs(JSONArray args) {
+        this.args = args;
     }
 
-    public JSONObject getData() {
+    public String getData() {
         return data;
     }
 
-    public void setData(JSONObject data) {
+    public void setData(String data) {
         this.data = data;
     }
 }

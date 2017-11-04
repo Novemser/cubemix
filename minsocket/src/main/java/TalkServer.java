@@ -1,3 +1,4 @@
+import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -6,8 +7,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
 
 public class TalkServer {
     public static void main(String args[]) {
@@ -44,11 +43,15 @@ public class TalkServer {
 
                 //如果该字符串为 "bye"，则停止循环
                 JSONObject inputJson = new JSONObject(line);
-                messageModel.setMehodName((String) inputJson.get("method"));
+                messageModel.setMethod((String) inputJson.get("method"));
                 if (inputJson.has("args")) {
-                    messageModel.setArgsVal((JSONArray) inputJson.get("args"));
+                    messageModel.setArgs((JSONArray) inputJson.get("args"));
                 }
-                os.print(ReSender.ResendTo(messageModel));
+
+                messageModel.setData(ReSender.ResendTo(messageModel));
+                ObjectMapper mapper = new ObjectMapper();
+                String jsonInString = mapper.writeValueAsString(messageModel);
+                os.print(jsonInString);
                 //向客户端输出该字符串
                 os.flush();
                 //刷新输出流，使Client马上收到该字符串
