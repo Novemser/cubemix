@@ -58,14 +58,13 @@ public class ObjStorageService {
         return s3ObjectSummaryList;
     }
 
-    public Boolean createBucket(String name) {
+    public Bucket createBucket(String name) {
         CreateBucketRequest createBucketRequest = new CreateBucketRequest(name);
         try {
-            amazonS3.createBucket(createBucketRequest);
-            return true;
+            return amazonS3.createBucket(createBucketRequest);
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
+            return null;
         }
 
     }

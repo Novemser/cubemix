@@ -47,7 +47,7 @@ public class MainController {
     }
 
     @PostMapping("/createBucket/{name}")
-    public Object createBucket(@PathVariable String name) {
+    public Bucket createBucket(@PathVariable String name) {
         return objStorageService.createBucket(name);
     }
 

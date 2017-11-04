@@ -101,7 +101,9 @@ public class SocketService {
 
                     data = resArray;
                 } else if (method.equals("createBucket")) {
-
+                    data = mainController.createBucket(args.get(0));
+                } else if (method.equals("createText")) {
+                    mainController.createText(args.get(0), args.get(1));
                 }
 
                 os.print(packResponse(method, args, data) + "\n");
