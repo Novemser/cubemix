@@ -34,21 +34,7 @@ CLIENT_HANDLER = {
     -- Data has been received on the link
     -- Will get called whenever there's new data on the link
     -- a_Data contains the raw received data, as a string
-    -- All returned values are ignored
-    -- LOG("CLIENT_HANDLER OnReceivedData")
-
-    -- TCP_DATA = TCP_DATA .. Data
-    -- local shiftLen = 0
-
-    -- for message in string.gmatch(TCP_DATA, '([^\n]+\n)') do
-    --   shiftLen = shiftLen + string.len(message)
-    --   -- remove \n at the end
-    --   message = string.sub(message,1,string.len(message)-1)
-    --   ParseTCPMessage(message)
-    -- end
-
-    -- TCP_DATA = string.sub(TCP_DATA,shiftLen+1)
-
+    ParseResponseMessage(message)
   end,
 
   OnRemoteClosed = function (TCPConn)
@@ -67,36 +53,12 @@ CLIENT_HANDLER = {
 -- SendMessage sends a message over global
 -- tcp connection CONNECTION. args and id are optional
 -- id stands for the request id.
-function SendMessage(cmd, args, data, id)
+function SendMessage(msg)
   if CONNECTION == nil
   then
     LOG("can't send message, client not connected")
     return
   end
-  local v = {cmd=cmd,args={args},data=data,id=id}
-  local msg = json.stringify(v) .. "\n"
-  LOG(msg)
+  LOG(""msg)
   CONNECTION:Send(msg)
-end
-
--- ParseTCPMessage parses a message received from
--- global tcp connection CONNECTION
-function ParseTCPMessage(message)
-  local m = json.parse(message)
-  -- deal with table events
-  if m.cmd == "event" and table.getn(m.args) > 0 and m.args[1] == "table"
-  then
-    handleTableEvent(m.data)
-  -- deal with monitor events
-  elseif m.cmd == "monitor" and table.getn(m.args) > 0 and m.args[1] == "all"
-  then
-    handleMonitorEvent(m.data)
-  elseif m.cmd == "event" and table.getn(m.args) > 0 and m.args[1] == "error"
-  then
-    localPlayer:SendMessage(cCompositeChat()
-		:AddTextPart(m.data,"@c"))
-  elseif m.cmd == "event" and table.getn(m.args) > 0 and m.args[1] == "result"
-  then
-    handleQueryEvent(m.data)
-  end
 end

@@ -3,27 +3,33 @@ PLAYER = nil
 
 
 function Initialize(Plugin)
-	Plugin:SetName("NovaNewPlugin")
+	Plugin:SetName("Cubemix")
 	Plugin:SetVersion(1)
 
 	-- Hooks
-	cPluginManager.AddHook(cPluginManager.HOOK_PLAYER_MOVING, OnPlayerMoving)
+	-- cPluginManager.AddHook(cPluginManager.HOOK_PLAYER_MOVING, OnPlayerMoving)
 	cRankManager:SetDefaultRank("Admin")
 
-	PLUGIN = Plugin -- NOTE: only needed if you want OnDisable() to use GetName() or something like that
+	PLUGIN = Plugin
 
 	-- Command Bindings
 	-- ADD THIS IF COMMAND DOES NOT REQUIRE A PARAMETER (/explode)
-	cPluginManager.BindCommand("/nova", "*", NovaMove, " ~ Simple Test")
-	cNetwork:Connect("10.1.1.41", 4700, CLIENT_HANDLER)
+	cPluginManager.BindCommand("/cubemix", "*", Cubemix, " ~ Cubemix command")
+	cNetwork:Connect(CUBEMIX_SERVER_IP, CUBEMIX_SERVER_PORT, CLIENT_HANDLER)
 
-	LOG("NOVA...Initialised " .. Plugin:GetName() .. " v." .. Plugin:GetVersion())
+	LOG("Cubemix Server Initialised " .. Plugin:GetName() .. " v." .. Plugin:GetVersion())
 	return true
 end
 
-function NovaMove(Split, Player)
+function Cubemix(Split, Player)
 	PLAYER = Player
-	CONNECTION:Send("GET / HTTP/1.0\r\nHost: www.baidu.com\r\n\r\n")
+	
+	if (#Split < 1) {
+		Player:SendMessage("Usage: /cubemix [command] [args]")
+		return true
+	}
+
+	ParseCommand(Split)
 	return true
 end
 
