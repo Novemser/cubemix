@@ -16,4 +16,7 @@ public class MessageController {
             throws Exception {
         return new OutputMessage(message.getFrom(), message.getText(), topic);
     }
+
+
+
 }
