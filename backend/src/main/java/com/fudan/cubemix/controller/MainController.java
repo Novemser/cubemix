@@ -1,5 +1,6 @@
 package com.fudan.cubemix.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.amazonaws.services.s3.model.Bucket;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.fudan.cubemix.model.MessageModel;
@@ -32,7 +33,7 @@ public class MainController {
 
     //createText {bucketName} {text}
     @RequestMapping(value = "/createText/{bucketName}/{text}", method = RequestMethod.POST)
-    public Object createText(@PathVariable String bucketName, @PathVariable String text) {
+    public JSONObject createText(@PathVariable String bucketName, @PathVariable String text) {
 
         return objStorageService.uploadTextTest(bucketName, text);
 

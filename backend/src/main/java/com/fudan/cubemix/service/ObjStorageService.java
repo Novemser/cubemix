@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -83,21 +84,25 @@ public class ObjStorageService {
     }
 
 
-    public Boolean uploadTextTest(String bucket, String text) {
-        Boolean result = false;
+    public com.alibaba.fastjson.JSONObject uploadTextTest(String bucket, String text) {
         try {
             InputStream is = new StringInputStream(text);
             ObjectMetadata metadata = new ObjectMetadata();
+            com.alibaba.fastjson.JSONObject jsonObject = new com.alibaba.fastjson.JSONObject();
+            jsonObject.put("creationDate", new Date().toString());
+            jsonObject.put("storageClass", "STANDARD");
             metadata.setContentLength(text.length());
-
+            String key = UUID.randomUUID().toString();
+            jsonObject.put("key", key);
+            jsonObject.put("size", text.length());
             PutObjectRequest request =
-                    new PutObjectRequest(bucket, UUID.randomUUID().toString(), is, metadata);
+                    new PutObjectRequest(bucket, key, is, metadata);
             amazonS3.putObject(request);
-            result = true;
+            return jsonObject;
         } catch (IOException e) {
             e.printStackTrace();
+            return null;
         }
-        return result;
     }
 
     public String downloadObject(String path, String bucket) {

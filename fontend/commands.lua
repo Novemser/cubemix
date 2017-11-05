@@ -1,13 +1,14 @@
 
 function ParseCommand(Split)
 	cmd = Split[2]
+	LOG(cmd)
 	if cmd == "listBucket" 
   	then
   		listBucket()
     elseif cmd == "listObject" 
   	then
 		listObject(Split[3])
-  	elseif cmd == "createBucket" 
+  	elseif cmd == "createBucket"
   	then
 		createBucket(Split[3])
   	elseif cmd == "createText"
@@ -16,6 +17,9 @@ function ParseCommand(Split)
   	elseif cmd == "destroyObject"
   	then
     	destroyObject(Split[3], Split[4])
+    elseif cmd == "destroyBucket"
+    then
+		destroyBucket(Split[3])
   	end
 end
 
@@ -37,4 +41,8 @@ end
 
 function destroyObject(bucketName, objName)
 	SendRequest("destroyObject", {bucketName, objName}, nil)
+end
+
+function destroyBucket(bucketName)
+	SendRequest("destroyBucket", {bucketName}, nil)
 end

@@ -14,6 +14,9 @@ CLIENT_HANDLER = {
     -- All returned values are ignored
     LOG("tcp client connected")
     CONNECTION = TCPConn
+--    SendRequest("listBucket",nil,nil)
+
+    -- SendRequest("listObject",{},nil)
   end,
 
   OnError = function (TCPConn, ErrorCode, ErrorMsg)
@@ -32,18 +35,18 @@ CLIENT_HANDLER = {
   OnReceivedData = function (TCPConn, Data)
     LOG("Incoming data:\r\n" .. Data)
 
-    TCP_DATA = TCP_DATA .. Data
-    local shiftLen = 0
+    -- TCP_DATA = TCP_DATA .. Data
+    -- local shiftLen = 0
 
-    for message in string.gmatch(TCP_DATA, '([^\n]+\n)') do
-      shiftLen = shiftLen + string.len(message)
+    -- for message in string.gmatch(TCP_DATA, '([^\n]+\n)') do
+    --   shiftLen = shiftLen + string.len(message)
       -- remove \n at the end
-      message = string.sub(message,1,string.len(message)-1)
-      ParseTCPMessage(message)
-      LOG("TCPMSG:" + TCP_DATA)
-    end
+      -- message = string.sub(message,1,string.len(message)-1)
+    ParseTCPMessage(Data)
+      -- LOG("TCPMSG:" + TCP_DATA)
+    -- end
 
-    TCP_DATA = string.sub(TCP_DATA,shiftLen+1)
+    -- TCP_DATA = string.sub(TCP_DATA,shiftLen+1)
   end,
 
   OnRemoteClosed = function (TCPConn)

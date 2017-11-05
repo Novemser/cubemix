@@ -118,10 +118,10 @@ public class SocketService {
                     object.put("creationDate", new Date().toString());
                     data = object;
                 } else if (method.equals("createText")) {
-                    JSONObject object = new JSONObject();
-                    object.put("isSuccess", mainController.createText(args.get(0), args.get(1)));
-                    object.put("text", args.get(1));
-                    data = object;
+//                    JSONObject object = new JSONObject();
+//                    object.put("key", );
+//                    object.put("text", args.get(1));
+                    data = mainController.createText(args.get(0), args.get(1));
                 } else if (method.equals("destroyBucket")) {
                     data = mainController.destroyBucket(args.get(0));
                 } else if (method.equals("destroyObject")) {
